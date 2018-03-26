@@ -16,8 +16,8 @@ export class TargetURL extends BaseEntity {
     @Column('text')
     url: string
 
-    @ManyToOne(_ => EventSubscription, e => e.urls)
-    event: EventSubscription | null
+    @OneToMany(_ => EventSubscription, e => e.urls)
+    event: EventSubscription[] | null
 
 }
 
@@ -33,7 +33,7 @@ export class EventSubscription extends BaseEntity {
     // @Column('text')
     // id?: number
 
-    @OneToMany(_=> TargetURL, t => t.event)
-    urls: TargetURL[]
+    @ManyToOne(_=> TargetURL, t => t.event)
+    urls: TargetURL
 
 }
