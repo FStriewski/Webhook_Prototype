@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { createKoaServer, Action, BadRequestError, useKoaServer } from "routing-controllers"
 import setupDb from './db'
 import TestController from './test/controller'
+import Webhook from './webhooks/controller'
 import * as Koa from 'koa'
 
 const port = process.env.PORT || 4008
@@ -9,6 +10,7 @@ const port = process.env.PORT || 4008
 const app = createKoaServer({
   controllers: [
     TestController,
+    Webhook,
   ]
 })
 

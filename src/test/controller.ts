@@ -2,6 +2,7 @@ import { JsonController, HttpCode, Post, Param, Get, Body, Authorized } from 'ro
 import Test from './entities';
 import * as request from 'superagent'
 
+// Simulates what app does: forward to url
 @JsonController()
 export default class TestController {
 
