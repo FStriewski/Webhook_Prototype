@@ -3,7 +3,7 @@ import { DefaultNamingStrategy } from 'typeorm/naming-strategy/DefaultNamingStra
 import { NamingStrategyInterface } from 'typeorm/naming-strategy/NamingStrategyInterface'
 import { snakeCase } from 'typeorm/util/StringUtils'
 import Test from './test/entities'
-import { Target, EventSubscription } from './webhooks/entities';
+import { Target, Subscription } from './webhooks/entities';
 
 class CustomNamingStrategy extends DefaultNamingStrategy implements NamingStrategyInterface {
 
@@ -31,7 +31,7 @@ export default () =>
     entities: [
       Test,
       Target,
-      EventSubscription
+      Subscription
     ],
     synchronize: true,
     logging: true,

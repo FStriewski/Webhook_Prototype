@@ -1,5 +1,5 @@
-import { JsonController, HttpCode, Post, Param, Get, Body, Authorized } from 'routing-controllers'
-import {Target, EventSubscription} from './entities'
+import { JsonController, HttpCode, Post, Param, Get, Body, Authorized, BadRequestError } from 'routing-controllers'
+import {Target, Subscription} from './entities'
 // import { request } from 'http';
 import * as request from 'superagent'
 
@@ -12,9 +12,12 @@ export default class Webhook {
             return Target.find()
         }
 
-    @Get('/events')
-        getAllEvents(){
-            return EventSubscription.find()
+    @Get('/subs')
+        async getAllEvents(){
+            const sub = await Subscription.find({name:'test'})
+             if (!sub) throw new BadRequestError('No sub found')
+
+            return sub.map(sub => sub.target.url)
         }
 
     @Post('/events')
@@ -22,7 +25,7 @@ export default class Webhook {
            @Body() body: object 
         ){
             try{
-              let ev =  EventSubscription.create(body)
+              let ev =  Subscription.create(body)
               return ev.save()
 
                 // await request
@@ -33,14 +36,21 @@ export default class Webhook {
 
             }
         }
-
+// On event this should do a rerouting to all target EventSubscribers
     @Post('/target')
         async regTarget(
-            @Body() body: object
+            @Body() body: Target
         ){
             try{
-                let target = Target.create(body)
-                return target.save()
+               // console.log(body)
+                const entity = await Target.create(body).save()
+               
+                await Subscription.create({
+                    name: 'test',
+                    target: entity
+                }).save()
+
+                return Target.findOneById(entity.id)
             }
             catch(error){
                 return {message: error.message}
