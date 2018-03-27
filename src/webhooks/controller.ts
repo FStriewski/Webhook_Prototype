@@ -1,6 +1,5 @@
-import { JsonController, Delete, HttpCode, Post, Param, Get, Body, Authorized, BadRequestError } from 'routing-controllers'
-import {Target} from './entities'
-// import { request } from 'http';
+import { JsonController, Delete, HttpCode, Post, Param, Get, Body, Authorized, BadRequestError, NotFoundError } from 'routing-controllers'
+import { Target} from './entity'
 import * as request from 'superagent'
 
 interface HookBody {
@@ -13,25 +12,18 @@ interface HookBody {
 @JsonController()
 export default class Webhook {
 
-    @Get('/target')
+    @Get('/hooks')
         getAllURLs(){
-            return Target.find()
+        return Target.find()
         }
 
-    @Post('/hook')
+    @Post('/hooks')
     async createHook(
         @Body() body: Target
     ) {
         try {
             const newResponse = await Target.create(body)
                 .save()
-
-            request
-                .post('oururl/events')
-                .send({
-                    eventname: 'response',
-                    data: newResponse
-                })
 
             //return Target.findOneById(entity.id)
         }
